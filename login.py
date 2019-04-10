@@ -39,6 +39,19 @@ class LoginTest(unittest.TestCase):
         r = requests.post(url_login, data=form_login2)
         self.assertIn('用户名或密码错误', parse.unquote(parse.unquote(r.text)))
 
+    def testlogin_fail2(self):
+        '''
+        密码为空
+        :return:
+        '''
+        url_login = url + '/LoginController_4M/login.action?'
+        form_login3 = form.copy()
+        form_login3['logintype'] = '2'
+        del form_login3['password']
+        data = form_login3
+        r = requests.post(url_login, data)
+        self.assertIn('用户名或密码错误', parse.unquote(parse.unquote(r.text)))
+
 
 def suite():
     loginTestCases = unittest.makeSuite(LoginTest, 'test')
