@@ -181,7 +181,7 @@ class LoginRegisterTest(unittest.TestCase):
         self.assertIn('请重新输入绑粉商家编号', parse.unquote(parse.unquote(r.text)))
 
 
-def suite():
+def login_suite():
     """
     测试套件
     :return: loginTestCases
@@ -194,4 +194,4 @@ if __name__ == "__main__":
     logging = Log().get_instance('tw')
     with open("F:/ScriptReport/report_" + datetime.now().strftime('%Y%m%d-%H-%M') + ".html", 'wb') as report:
         runner = HTMLTestRunner.HTMLTestRunner(stream=report, title='测试报告', description='详情')
-        runner.run(suite())
+        runner.run(login_suite())
