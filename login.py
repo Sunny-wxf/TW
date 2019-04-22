@@ -10,8 +10,11 @@ from datetime import datetime
 import random
 from logger import Log
 
+
 class LoginRegisterTest(unittest.TestCase):
     # 测试登陆注册接口
+
+    __logging = Log().get_instance('tw')
 
     def setUp(self):
         """
@@ -27,7 +30,7 @@ class LoginRegisterTest(unittest.TestCase):
         登陆成功
         :return:
         """
-        logging.debug('run case,test case name:test_login_success')
+        self.__logging.debug('run case,test case name:test_login_success')
         url_login = self.url + '/LoginController_4M/login.action?'
         user_info1 = self.user_info.copy()
         user_info1['logintype'] = '2'
@@ -39,7 +42,7 @@ class LoginRegisterTest(unittest.TestCase):
         密码错误
         :return:
         """
-        logging.debug('run case,test case name:test_login_fail1')
+        self.__logging.debug('run case,test case name:test_login_fail1')
         url_login = self.url + '/LoginController_4M/login.action?'
         user_info2 = self.user_info.copy()
         user_info2['logintype'] = '2'
@@ -52,7 +55,7 @@ class LoginRegisterTest(unittest.TestCase):
         用户名错误
         :return:
         """
-        logging.debug('run case,test case name:test_login_fail2')
+        self.__logging.debug('run case,test case name:test_login_fail2')
         url_login = self.url + '/LoginController_4M/login.action?'
         user_info3 = self.user_info.copy()
         user_info3['logintype'] = '2'
@@ -77,7 +80,7 @@ class LoginRegisterTest(unittest.TestCase):
         推荐人非创客时注册成功
         :return:
         """
-        logging.debug('run case,test case name:test_register1')
+        self.__logging.debug('run case,test case name:test_register1')
         url_register = self.url + '/UserController_4M/insertUser.action? '
         ver_code = self.verification_code()
         form_register = {
@@ -95,7 +98,7 @@ class LoginRegisterTest(unittest.TestCase):
         推荐人为创客时注册成功
         :return:
         """
-        logging.debug('run case,test case name:test_register2')
+        self.__logging.debug('run case,test case name:test_register2')
         url_register = self.url + '/UserController_4M/insertUser.action? '
         ver_code = self.verification_code()
         form_register = {
@@ -103,7 +106,7 @@ class LoginRegisterTest(unittest.TestCase):
             'password': 'e10adc3949ba59abbe56e057f20f883e',
             'presenterMobile': '14611110000',
             'checkCode': ver_code[1],
-            'fan_shop_mobile': '14611110001'
+            'fan_shop_mobile': '14611110008'
         }
         r = requests.post(url_register, data=form_register)
         self.assertIn('注册成功', parse.unquote(parse.unquote(r.text)))
@@ -113,7 +116,7 @@ class LoginRegisterTest(unittest.TestCase):
         推荐人为空时注册失败
         :return:
         """
-        logging.debug('run case,test case name:test_register_fail1')
+        self.__logging.debug('run case,test case name:test_register_fail1')
         url_register = self.url + '/UserController_4M/insertUser.action? '
         ver_code = self.verification_code()
         form_register = {
@@ -131,7 +134,7 @@ class LoginRegisterTest(unittest.TestCase):
         验证码错误时注册失败
         :return:
         """
-        logging.debug('run case,test case name:test_register_fail2')
+        self.__logging.debug('run case,test case name:test_register_fail2')
         url_register = self.url + '/UserController_4M/insertUser.action? '
         ver_code = self.verification_code()
         form_register = {
@@ -149,7 +152,7 @@ class LoginRegisterTest(unittest.TestCase):
         不输入手机号时注册失败
         :return:
         """
-        logging.debug('run case,test case name:test_register_fail3')
+        self.__logging.debug('run case,test case name:test_register_fail3')
         url_register = self.url + '/UserController_4M/insertUser.action? '
         ver_code = self.verification_code()
         form_register = {
@@ -167,7 +170,7 @@ class LoginRegisterTest(unittest.TestCase):
         推荐人为创客时不输入绑粉商家编号时注册失败
         :return:
         """
-        logging.debug('run case,test case name:test_register_fail4')
+        self.__logging.debug('run case,test case name:test_register_fail4')
         url_register = self.url + '/UserController_4M/insertUser.action? '
         ver_code = self.verification_code()
         form_register = {
@@ -181,17 +184,30 @@ class LoginRegisterTest(unittest.TestCase):
         self.assertIn('请重新输入绑粉商家编号', parse.unquote(parse.unquote(r.text)))
 
 
-def login_suite():
-    """
-    测试套件
-    :return: loginTestCases
-    """
-    login_test_cases = unittest.makeSuite(LoginRegisterTest, 'test')
-    return login_test_cases
+class Suite(unittest.TestCase):
+
+    def test_login_suite(self):
+        """
+        测试套件
+        :return: loginTestCases
+        """
+        login_test_cases = unittest.makeSuite(LoginRegisterTest, 'test')
+        return login_test_cases
+
+    def test_report(self):
+        with open("F:/ScriptReport/report_" + datetime.now().strftime('%Y%m%d-%H-%M') + ".html", 'wb') as report:
+            report.write('1234'.encode('utf-8'))
+            runner = HTMLTestRunner.HTMLTestRunner(stream=report, title='测试报告', description='详情')
+            runner.run(self.test_login_suite())
 
 
-if __name__ == "__main__":
-    logging = Log().get_instance('tw')
-    with open("F:/ScriptReport/report_" + datetime.now().strftime('%Y%m%d-%H-%M') + ".html", 'wb') as report:
-        runner = HTMLTestRunner.HTMLTestRunner(stream=report, title='测试报告', description='详情')
-        runner.run(login_suite())
+if __name__ == '__main__':
+    suite = Suite()
+    suite.test_report()
+
+
+
+
+
+
+
