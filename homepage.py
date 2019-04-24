@@ -14,7 +14,7 @@ from logger import Log
 class HomePage(unittest.TestCase):
     # 首页所有接口
 
-    __logging = Log().get_instance('tw')
+    __logging = Log().get_instance('tw_homepage')
 
     def setUp(self):
         """

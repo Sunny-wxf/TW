@@ -14,7 +14,7 @@ from logger import Log
 class LoginRegisterTest(unittest.TestCase):
     # 测试登陆注册接口
 
-    __logging = Log().get_instance('tw')
+    __logging = Log().get_instance('tw_login')
 
     def setUp(self):
         """
