@@ -36,6 +36,7 @@ class LoginRegisterTest(unittest.TestCase):
         user_info1['logintype'] = '2'
         r = requests.post(url_login, data=user_info1)
         self.assertIn('登录成功', parse.unquote(parse.unquote(r.text)))
+        return r.cookies
 
     def test_login_fail1(self):
         """

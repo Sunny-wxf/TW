@@ -7,8 +7,9 @@ import unittest
 from urllib import parse
 import HTMLTestRunner
 from datetime import datetime
-import random
+# from login import LoginRegisterTest
 from logger import Log
+from conf import Config as Config
 
 
 class HomePage(unittest.TestCase):
@@ -22,9 +23,13 @@ class HomePage(unittest.TestCase):
         :param self.url: 请求域名
         :param self.user_info: 请求参数
         """
-        self.url_twweb = 'http://39.105.191.175:8080/twweb'
-        self.url_system = 'http://39.105.191.175:8080/tw_system'
-        self.user_info = {'mobile': 14611110000, 'password': 'e10adc3949ba59abbe56e057f20f883e'}
+        # self.url_twweb = 'http://39.105.191.175:8080/twweb'
+        # self.url_system = 'http://39.105.191.175:8080/tw_system'
+        # self.user_info = {'mobile': 14611110000, 'password': 'e10adc3949ba59abbe56e057f20f883e'}
+        self.url_twweb = Config().getconf("http_url").url_twweb
+        self.url_system = Config().getconf("http_url").url_system
+        self.user_info = Config().getconf("user").user_info
+        self.user_id = Config().getconf("user").user_id
 
     def test_version_update(self):
         """
@@ -37,6 +42,19 @@ class HomePage(unittest.TestCase):
         r = requests.post(url=url, data=form)
         self.assertEqual('200', str(r.status_code))
 
+    def test_ad(self):
+        """
+        首页广告接口
+        :return:
+        """
+        self.__logging.debug('run case,test case name:test_ad')
+        url = self.url_twweb + '/Ad_data_Controller_4M/queryHomeAdData.action?'
+        # login = LoginRegisterTest()
+        # cookie = login.test_login_success()
+        # form = {'JSESSIONID': cookie}
+        form = {'JSESSIONID': self.user_id}
+        r = requests.post(url, data=form)
+        self.assertEqual('200', str(r.status_code))
 
 
 class Suite(object):
